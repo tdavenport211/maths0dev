@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+  
+<div class="container">
+<h1>Arithmetic of Fractions</h1>
+<p>When learning how to do things in maths it is always a good idea to insert easy numbers into your equations to check everything is working as you expect.</p>
+
+<p>We will start with multiplication of fractions. Imagine a circular pizza. If we cut it in half and eat one half we are left with a half. Numerically we can express this as $1 \times 1/2 = 1/2$</p>
+
+<p>Now, if we cut the half into half and eat one half we are left with a quarter. Numerically we can express this as $1/2 \times 1/2 = 1/4$</p>
+
+{% include '_examples.html' %}
+
+</div>
+<br><br>
+
+{% endblock %}

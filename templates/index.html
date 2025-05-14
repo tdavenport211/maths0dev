@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron text-center">
+  {% if name %}
+    <h1>Hello {{ name }}, welcome to Babbage Maths</h1>
+  {% else %}
+    <h1>Welcome to Babbage Maths</h1>
+  {% endif %}
+</div>
+  
+<div class="container">
+<h1>Babbage Maths</h1>
+<p>Babbage Maths provides the mathematics necessary to get you into university. It starts with a revision of numbers, fractions and algebra and covers basic . . . and calculus.</p>
+
+
+<h1>Books</h1>
+<p>Some people prefer to learn from books. The best maths book for you is the one you understand. You might read two books on the same subject, one you understand and one you don't. Stick with the one you understand.</p>
+
+<p>Below are some books past students have found helpful:</p>
+
+<table>
+  <tr><td><img src="{{ url_for('static', path='images/Book1.png') }}" alt="Engineering Mathematics by John Bird"></td><td>&nbsp;</td><td>Engineering Mathematics<br>John Bird<br> 978-1-138-67359-5</td>
+  <td><img src="{{ url_for('static', path='images/Book2.png') }}" alt="Foundation Mathematics by Ken Stroud"></td><td>&nbsp;</td><td>Foundation Mathematics<br>K A Stroud<br>978-0-230-57907-1</td></tr>
+  <tr><td><img src="{{ url_for('static', path='images/Book4.png') }}" alt="Understanding Engineering Mathematics by Bill Cox"></td><td>&nbsp;</td><td>Understanding Engineering Mathematics<br>Bill Cox<br>0-14-013632-0</td>
+  <td><img src="{{ url_for('static', path='images/Book3.png') }}" alt="Statistics Without Tears by Derek Rowntree"></td><td>&nbsp;</td><td>Statistics Without Tears<br>Derek Rowntree<br>978-0-750-65098-4</td></tr>
+
+
+</table>
+
+</div>
+<br><br>
+{% endblock %}

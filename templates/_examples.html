@@ -1,0 +1,70 @@
+
+<div class="container-fluid">
+<div class="card border-dark" style="background-color: #161616;">
+  <div class="card-header text-white mx-auto"><br/><h1>Examples</h1></div>
+  <div id="examples" class="card-body text-white mx-auto">
+  </div>
+  <div class="card-footer">&nbsp;</div>
+</div>
+<div id="output"></div>
+
+<script>
+$(document).ready(function() {
+  let s = '{{ data }}';
+  console.log(s);
+  s = s.replaceAll('&#34;', '"');
+  s = s.replaceAll('&#39;', '"');
+  s = s.replaceAll('&lt;', '<');
+  s = s.replaceAll('&gt;', '>'); 
+  s = s.replaceAll('&amp;', '&'); 
+//  s = s.replaceAll('<e1>', '   | Did not state the question');
+//  s = s.replaceAll('`', '"')
+
+  //console.log(s);
+  let s1 = JSON.parse(s);
+  s2 = s1.examples;  //questions;
+  s2 = s2.replaceAll('`', '"')
+  s2 = s2.replaceAll('src=|', 'src="static/images/');
+  s2 = s2.replaceAll('.png|', '.png"');
+
+  // For mathjax
+  s2 = s2.replaceAll('~', '\\');
+  s2 = s2.replaceAll('&lt;int&gt;', '\\\\int ');
+  s2 = s2.replaceAll('<int>', '\\int ');
+  s2 = s2.replaceAll('{/}', ' \\\\div ');
+  s2 = s2.replaceAll('{frac}', '\\\\frac');
+  s2 = s2.replaceAll('{dfrac}', '\\dfrac');
+  s2 = s2.replaceAll(' times ', ' \\times '); 
+  s2 = s2.replaceAll(' \times ', ' \\times '); 
+
+  s2 = s2.replaceAll('<cr>', '\n')
+
+  console.log(32, s2);
+  $('#examples').html(s2); 
+  //setTimeout(myScroll, 10);  
+
+
+  // =========================================================
+  $('#examples').on('click', function(e){
+    //console.log(e.target.id);
+    if(e.target.id.indexOf('babb') > -1) {
+      console.log(e.target.id);
+      e.preventDefault();
+      mark_example(e.target.id);
+    }
+  });
+  // =========================================================
+  $('#examples').on('keydown', function(e){
+    //console.log(e.keyCode);
+    if(e.keyCode == 13){
+      //console.log(e.target.id);
+      e.preventDefault();
+      mark_example(e.target.id);
+    }
+  })
+  // =========================================================
+});
+</script>
+
+
+

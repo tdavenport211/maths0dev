@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Babbage</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %} {% endblock %}</title>
+  <link rel="shortcut icon" href="{{ url_for('static', path='favicon.ico') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/babbage.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/babbage.js"></script>
+  <script src="/static/typeahead.bundle.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS5C4TMQCJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-BS5C4TMQCJ');
+  </script>
+<style>
+  @media (min-width: 992px){
+    .dropdown-menu .dropdown-toggle:after{
+      border-top: .3em solid transparent;
+        border-right: 0;
+        border-bottom: .3em solid transparent;
+        border-left: .3em solid;
+    }
+
+    .dropdown-menu .dropdown-menu{
+      margin-left:0; margin-right: 0;
+    }
+
+    .dropdown-menu li{
+      position: relative;
+    }
+    .nav-item .submenu{ 
+      display: none;
+      position: absolute;
+      left:100%; top:-7px;
+    }
+    .nav-item .submenu-left{ 
+      right:100%; left:auto;
+    }
+
+    .dropdown-menu > li:hover{ background-color: #f1f1f1 }
+    .dropdown-menu > li:hover > .submenu{
+      display: block;
+    }
+  }
+
+  #popupForm {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #808080;
+    padding: 30px;
+    border: 2px solid #ccc; 
+    z-index: 1051; /* Ensure it's above the modal */
+  }  
+
+  #popup {
+    display: none; /* Initially hidden */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black with opacity */
+  }
+
+  #popup-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px;
+  }
+</style>
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="container">
+  <!-- for messages -->
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog mw-100 w-75">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id='mheader'>Babbage</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body" id="mbody">
+        Modal body..
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- AI Modal -->
+<div class="modal" id="aiModal">
+  <div class="modal-dialog mw-100 w-75">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id='aiheader'>Babbage</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body" id="aibody">
+        Modal body..
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div id="popupForm">
+  <h2>To help our research please complete the following:</h2>
+    <form id="myForm">
+      <label for="helpful">How helpful was the AI?</label><br>
+      <select id="helpful" name="helpful">
+        <option value="1">Very helpful</option>
+        <option value="2">Somewhat helpful</option>
+        <option value="3">Somewhat unhelpful</option>
+        <option value="4">Not helpful</option>
+      </select>      
+
+      <label for="feedback">In what way was it helpful?</label><br>
+      <textarea id="feedback" name="feedback"></textarea><br>
+      <button type="text" id="submitButton" class="btn btn-success border-dark" style="font-size: 30px;">Submit</button>
+      <button type="text" id="cancelButton" class="btn btn-danger border-dark" style="font-size: 30px;">Cancel</button>
+  </form>
+</div>
+
+<div id="popup">
+    <div id="popup-content">
+        <p>This popup will disappear after 2 seconds.</p>
+    </div>
+</div>
+
+<div class="container">
+{% block content %} 
+{% endblock %}
+<!-- csrf token -->
+</div>
+
+<script>
+$(document).ready(function(){
+
+  // jQuery code
+
+  //////////////////////// Prevent closing from click inside dropdown
+    $(document).on('click', '.dropdown-menu', function (e) {
+      e.stopPropagation();
+    });
+
+    // make it as accordion for smaller screens
+    if ($(window).width() < 992) {
+      $('.dropdown-menu a').click(function(e){
+        e.preventDefault();
+          if($(this).next('.submenu').length){
+            $(this).next('.submenu').toggle();
+          }
+          $('.dropdown').on('hide.bs.dropdown', function () {
+         $(this).find('.submenu').hide();
+      })
+      });
+  }
+  MathJax.Hub.Typeset(); 
+});
+
+$(document).on('click', '.dropdown-menu', function (e) {
+  //e.stopPropagation();
+  console.log(e.target);
+  let s = String(e.target);
+  console.log(s);
+  window.location.href = s;
+});
+
+// make it an accordion for smaller screens
+if ($(window).width() < 992) {
+  $('.dropdown-menu a').click(function(e){
+    e.preventDefault();
+    if($(this).next('.submenu').length){
+      $(this).next('.submenu').toggle();
+    }
+    $('.dropdown').on('hide.bs.dropdown', function () {
+     $(this).find('.submenu').hide();
+    })
+  });
+}
+</script>
+
+</body>
+</html>
+
